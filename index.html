@@ -4,67 +4,278 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Company</title>
+
+  <!-- Optional nice font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
   <style>
-    body { margin:0; font-family: "Poppins", sans-serif; line-height:1.6; color:#222; }
-    header { position:fixed; top:0; width:100%; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,.1); padding:10px 20px; display:flex; justify-content:space-between; align-items:center; z-index:1000; }
-    header nav a { margin:0 10px; text-decoration:none; color:#333; font-weight:500; }
-    section { padding:80px 20px; max-width:1100px; margin:auto; }
-    .hero { height:90vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:url('images/hero.jpg') center/cover no-repeat; color:white; text-align:center; }
-    .hero h1 { font-size:3rem; margin-bottom:10px; }
-    .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px; }
-    .gallery img { width:100%; border-radius:8px; transition:transform .3s; }
-    .gallery img:hover { transform:scale(1.05); }
-    .videos { display:grid; grid-template-columns:repeat(auto-fill,minmax(400px,1fr)); gap:20px; }
-    iframe { width:100%; aspect-ratio:16/9; border:0; border-radius:8px; }
-    footer { background:#f8f8f8; text-align:center; padding:20px; font-size:0.9rem; color:#666; }
+    /* === Base / Theme === */
+    :root{
+      --bg: #0b0c10;
+      --panel: #121317;
+      --text: #e9eef5;
+      --muted: #A8B3CF;
+      --brand: #6ea8fe;           /* change to your brand color */
+      --brand-2: #7bffe1;
+      --ring: rgba(110,168,254,.45);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+      --container: 1150px;
+      --header-h: 64px;           /* used for sticky + anchor offset */
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f7f8fb; --panel:#ffffff; --text:#0c1222; --muted:#5b6477;
+        --shadow: 0 6px 22px rgba(0,0,0,.08);
+      }
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--text); background: radial-gradient(1200px 600px at 10% -10%, rgba(123,255,225,.12), transparent 60%),
+                          radial-gradient(1200px 600px at 90% 10%, rgba(110,168,254,.12), transparent 60%),
+                          var(--bg);
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+    .container{max-width:var(--container); margin-inline:auto; padding-inline:18px}
+
+    /* === Header === */
+    header{
+      position:sticky; top:0; z-index:1000; height:var(--header-h);
+      backdrop-filter:saturate(1.2) blur(8px);
+      background: color-mix(in oklab, var(--panel) 80%, transparent);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between; height:var(--header-h);
+      gap:12px;
+    }
+    .brand{font-weight:800; letter-spacing:.2px; font-size:1.05rem; white-space:nowrap}
+    .brand .dot{color:var(--brand)}
+    .links{
+      display:flex; align-items:center; gap:22px; flex-wrap:wrap; /* prevents overflow on medium widths */
+    }
+    .links a{
+      padding:8px 10px; border-radius:10px; color:var(--muted); font-weight:600;
+    }
+    .links a:hover, .links a:focus-visible{ color:var(--text); outline:2px solid var(--ring); outline-offset:2px }
+
+    /* Mobile menu */
+    .menu-btn{
+      display:none; border:1px solid rgba(255,255,255,.15); background:var(--panel);
+      height:38px; width:42px; border-radius:10px; align-items:center; justify-content:center;
+      box-shadow:var(--shadow); cursor:pointer;
+    }
+    .menu-btn span{display:block; width:20px; height:2px; background:var(--text); position:relative}
+    .menu-btn span::before,.menu-btn span::after{content:""; position:absolute; left:0; right:0; height:2px; background:var(--text)}
+    .menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
+
+    @media (max-width: 880px){
+      .menu-btn{display:flex}
+      .links{
+        position:fixed; inset:var(--header-h) 0 auto 0; /* below header */
+        padding:14px 18px 22px; background:var(--panel); box-shadow:var(--shadow);
+        transform:translateY(-16px); opacity:0; pointer-events:none; transition:.2s ease;
+        display:grid; gap:10px; grid-auto-rows:min-content;
+      }
+      .links.open{ transform:translateY(0); opacity:1; pointer-events:auto }
+    }
+
+    /* === Sections === */
+    section{ padding:70px 0 }
+    section:where(#about,#gallery,#videos,#contact){ scroll-margin-top: calc(var(--header-h) + 14px) } /* anchor offset */
+
+    /* Hero */
+    .hero{
+      padding: 70px 0 60px; position:relative; isolation:isolate;
+    }
+    .hero-card{
+      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, transparent), color-mix(in oklab, var(--panel) 80%, transparent));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:calc(var(--radius) + 6px); padding:36px 26px; box-shadow:var(--shadow);
+      display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center;
+    }
+    .hero h1{ margin:0 0 8px; font-size: clamp(1.8rem, 1.4rem + 2.1vw, 3rem); letter-spacing:.2px }
+    .hero p{ margin:0 0 18px; color:var(--muted) }
+    .cta{
+      display:inline-flex; align-items:center; gap:10px;
+      background:linear-gradient(90deg, var(--brand), var(--brand-2));
+      color:#051016; font-weight:800; padding:12px 16px; border-radius:12px; box-shadow:var(--shadow);
+    }
+    .hero-media{
+      aspect-ratio: 16/10; border-radius:12px; overflow:hidden;
+      background: url('images/hero.jpg') center/cover no-repeat;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    @media (max-width: 900px){
+      .hero-card{ grid-template-columns:1fr }
+      .hero-media{ order:-1; aspect-ratio: 16/9 }
+    }
+
+    /* About */
+    .about{
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:24px;
+    }
+    .about .panel{
+      background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow);
+    }
+    @media (max-width: 900px){ .about{ grid-template-columns:1fr } }
+
+    /* Gallery */
+    .grid{
+      display:grid; gap:10px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    .card{
+      background:var(--panel); border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+      transition: transform .18s ease, box-shadow .2s ease;
+    }
+    .card:hover{ transform:translateY(-2px) }
+    .card img{ width:100%; height:100%; object-fit:cover; aspect-ratio:4/3 }
+
+    /* Videos */
+    .video-grid{ display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) }
+    iframe, .video{
+      width:100%; aspect-ratio:16/9; border:0; border-radius:12px; box-shadow:var(--shadow);
+      background:var(--panel); border:1px solid rgba(255,255,255,.08);
+    }
+
+    /* Contact */
+    .contact{
+      display:grid; grid-template-columns:1fr 1fr; gap:24px;
+    }
+    .contact .panel{ background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow) }
+    .list{display:grid; gap:6px; color:var(--muted)}
+    .list a{ color:var(--text); font-weight:600 }
+    @media (max-width: 900px){ .contact{ grid-template-columns:1fr } }
+
+    /* Footer */
+    footer{ padding:28px 18px; color:var(--muted); text-align:center }
   </style>
 </head>
 <body>
+  <!-- ================= Header ================= -->
   <header>
-    <div><strong>My Company</strong></div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#videos">Videos</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="container nav">
+      <div class="brand">My Company<span class="dot">.</span></div>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span>
+      </button>
+
+      <nav class="links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#videos">Videos</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
   </header>
 
+  <!-- ================= Hero ================= -->
   <section class="hero">
-    <h1>Welcome to My Company</h1>
-    <p>Short tagline goes here</p>
+    <div class="container">
+      <div class="hero-card">
+        <div>
+          <h1>We make great things.</h1>
+          <p>Short intro about your business—one or two sentences that explain what you do and why it matters.</p>
+          <a href="#gallery" class="cta">See our work →</a>
+        </div>
+        <div class="hero-media" role="img" aria-label="Hero image"></div>
+      </div>
+    </div>
   </section>
 
+  <!-- ================= About ================= -->
   <section id="about">
-    <h2>About Us</h2>
-    <p>Write something short and engaging about your company here.</p>
+    <div class="container about">
+      <div class="panel">
+        <h2>About Us</h2>
+        <p>Keep it friendly and concise. State your value and what sets you apart.</p>
+        <p>Example: “We’re a Zagreb-based studio helping clients tell stories through video and imagery.”</p>
+      </div>
+      <div class="panel">
+        <strong>Highlights</strong>
+        <ul>
+          <li>Over 40 curated images</li>
+          <li>Five short videos (3–5 min)</li>
+          <li>Fast, mobile-first site</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
+  <!-- ================= Gallery ================= -->
   <section id="gallery">
-    <h2>Gallery</h2>
-    <div class="gallery">
-      <img src="images/photo1.webp" alt="">
-      <img src="images/photo2.webp" alt="">
-      <!-- add more -->
+    <div class="container">
+      <h2>Gallery</h2>
+      <div class="grid" aria-label="Image gallery">
+        <!-- Drop your images into /images and add more <div class="card"><img ...> -->
+        <div class="card"><img src="images/photo1.webp" alt="Photo 1" loading="lazy"></div>
+        <div class="card"><img src="images/photo2.webp" alt="Photo 2" loading="lazy"></div>
+        <div class="card"><img src="images/photo3.webp" alt="Photo 3" loading="lazy"></div>
+        <!-- ...repeat until ~40 -->
+      </div>
     </div>
   </section>
 
+  <!-- ================= Videos ================= -->
   <section id="videos">
-    <h2>Videos</h2>
-    <div class="videos">
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID1" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID2" allowfullscreen></iframe>
+    <div class="container">
+      <h2>Videos</h2>
+      <div class="video-grid">
+        <!-- Replace VIDEO_IDs with your YouTube (or Vimeo) IDs -->
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Video 1" loading="lazy" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Video 2" loading="lazy" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" title="Video 3" loading="lazy" allowfullscreen></iframe>
+      </div>
     </div>
   </section>
 
+  <!-- ================= Contact ================= -->
   <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: info@example.hr</p>
-    <p>Address: City, Country</p>
+    <div class="container contact">
+      <div class="panel">
+        <h2>Contact</h2>
+        <div class="list">
+          <div>Email: <a href="mailto:info@example.hr">info@example.hr</a></div>
+          <div>Phone: <a href="tel:+3850000000">+385 00 000 000</a></div>
+          <div>Address: Zagreb, Croatia</div>
+        </div>
+      </div>
+      <div class="panel">
+        <!-- Optional map or contact form vendor embed -->
+        <iframe
+          class="video"
+          src="https://www.google.com/maps?q=Zagreb&output=embed"
+          title="Map"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          aria-label="Map">
+        </iframe>
+      </div>
+    </div>
   </section>
 
   <footer>
-    © 2025 My Company – All rights reserved.
+    © 2025 My Company — All rights reserved.
   </footer>
+
+  <script>
+    // Mobile menu toggle
+    const btn = document.getElementById('menuBtn');
+    const links = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    // Close menu after clicking a link (mobile)
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('open'); btn.setAttribute('aria-expanded', 'false');
+    }));
+  </script>
 </body>
 </html>
