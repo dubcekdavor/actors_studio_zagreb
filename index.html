@@ -29,4 +29,315 @@
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0; font-family:Inter, sys
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(88,166,255,.12), transparent 60%),
+        radial-gradient(1200px 600px at 90% 10%, rgba(255,209,102,.12), transparent 60%),
+        var(--bg);
+    }
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+    .container{max-width:var(--container); margin-inline:auto; padding-inline:18px}
+
+    /* ===== Header ===== */
+    header{
+      position:sticky; top:0; z-index:1000; height:var(--header-h);
+      backdrop-filter:saturate(1.2) blur(8px);
+      background: color-mix(in oklab, var(--panel) 80%, transparent);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; height:var(--header-h); gap:12px}
+    .brand{font-weight:800; font-size:1.05rem; white-space:nowrap; letter-spacing:.2px}
+    .brand .dot{color:var(--brand)}
+    .links{display:flex; align-items:center; gap:22px; flex-wrap:wrap}
+    .links a{padding:8px 10px; border-radius:10px; color:var(--muted); font-weight:600}
+    .links a:hover,.links a:focus-visible{color:var(--text); outline:2px solid var(--ring); outline-offset:2px}
+
+    /* Enroll button in header */
+    .enroll-btn{
+      background:linear-gradient(90deg, var(--brand), var(--brand-2));
+      color:#0b0f19; font-weight:800; padding:10px 14px; border-radius:12px; box-shadow:var(--shadow);
+    }
+
+    /* Mobile menu */
+    .menu-btn{
+      display:none; border:1px solid rgba(255,255,255,.18); background:var(--panel);
+      height:38px; width:42px; border-radius:10px; align-items:center; justify-content:center; box-shadow:var(--shadow); cursor:pointer;
+    }
+    .menu-btn span{display:block; width:20px; height:2px; background:var(--text); position:relative}
+    .menu-btn span::before,.menu-btn span::after{content:""; position:absolute; left:0; right:0; height:2px; background:var(--text)}
+    .menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
+    @media (max-width: 880px){
+      .menu-btn{display:flex}
+      .links{
+        position:fixed; inset:var(--header-h) 0 auto 0;
+        padding:14px 18px 22px; background:var(--panel); box-shadow:var(--shadow);
+        transform:translateY(-16px); opacity:0; pointer-events:none; transition:.2s ease;
+        display:grid; gap:10px; grid-auto-rows:min-content;
+      }
+      .links.open{transform:translateY(0); opacity:1; pointer-events:auto}
+    }
+
+    /* ===== Sections ===== */
+    section{padding:70px 0}
+    section:where(#about,#programs,#method,#gallery,#videos,#testimonials,#contact){scroll-margin-top:calc(var(--header-h) + 14px)}
+
+    /* Hero */
+    .hero{padding:70px 0 60px}
+    .hero-card{
+      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, transparent), color-mix(in oklab, var(--panel) 80%, transparent));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:calc(var(--radius) + 6px); padding:36px 26px; box-shadow:var(--shadow);
+      display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center;
+    }
+    .hero h1{margin:0 0 10px; font-size:clamp(1.9rem, 1.4rem + 2.4vw, 3.2rem)}
+    .tagline{color:var(--muted); margin:0 0 18px}
+    .cta{display:inline-flex; align-items:center; gap:10px; background:linear-gradient(90deg, var(--brand), var(--brand-2));
+      color:#0b0f19; font-weight:800; padding:12px 16px; border-radius:12px; box-shadow:var(--shadow)}
+    .hero-media{aspect-ratio: 16/10; border-radius:12px; overflow:hidden; background:url('images/hero.jpg') center/cover no-repeat;
+      border:1px solid rgba(255,255,255,.08)}
+    @media (max-width: 900px){ .hero-card{grid-template-columns:1fr} .hero-media{order:-1; aspect-ratio:16/9} }
+
+    /* Feature triplet */
+    .features{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px}
+    .feature{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow)}
+    .feature b{display:block; margin-bottom:6px}
+    @media (max-width: 900px){ .features{grid-template-columns:1fr} }
+
+    /* Two-column panels */
+    .split{display:grid; grid-template-columns:1.1fr .9fr; gap:24px}
+    .panel{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
+
+    /* Programs cards */
+    .cards{display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr))}
+    .card{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow)}
+    .badge{display:inline-block; font-size:.8rem; padding:4px 8px; border-radius:999px; background:color-mix(in oklab, var(--brand) 22%, transparent); color:var(--text); border:1px solid rgba(255,255,255,.12)}
+
+    /* Gallery */
+    .grid{display:grid; gap:10px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))}
+    .grid .thumb{border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,255,255,.08); background:var(--panel)}
+    .grid img{width:100%; aspect-ratio:4/3; object-fit:cover}
+
+    /* Videos */
+    .video-grid{display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr))}
+    iframe{width:100%; aspect-ratio:16/9; border:0; border-radius:12px; box-shadow:var(--shadow); background:var(--panel); border:1px solid rgba(255,255,255,.08)}
+
+    /* Testimonials */
+    .quotes{display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr))}
+    .quote{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow)}
+    .quote small{color:var(--muted)}
+
+    /* Contact */
+    .contact{display:grid; grid-template-columns:1fr 1fr; gap:24px}
+    @media (max-width: 900px){ .contact{grid-template-columns:1fr} }
+
+    /* Footer */
+    footer{padding:28px 18px; color:var(--muted); text-align:center}
+  </style>
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="container nav">
+      <div class="brand">Actors Studio Zagreb<span class="dot">.</span></div>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span>
+      </button>
+
+      <nav class="links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#programs">Programs</a>
+        <a href="#method">Method</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#videos">Videos</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact" class="enroll-btn">Enroll</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div>
+          <h1>Learn English through Theatre 🎭</h1>
+          <p class="tagline">Kids build confidence, pronunciation, and creativity while acting, moving, and speaking English on stage.</p>
+          <a href="#programs" class="cta">Explore Programs →</a>
+
+          <div class="features">
+            <div class="feature">
+              <b>Speak with confidence</b>
+              Fun improvisations and scenes make fluent speech natural.
+            </div>
+            <div class="feature">
+              <b>Pronunciation & rhythm</b>
+              Warm-ups, chants, and scripts refine clear sounds and intonation.
+            </div>
+            <div class="feature">
+              <b>Teamwork on stage</b>
+              Kids create together—listening, reacting, and supporting partners.
+            </div>
+          </div>
+        </div>
+
+        <!-- Replace hero.jpg -->
+        <div class="hero-media" role="img" aria-label="Children performing on stage"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== About / Highlights ===== -->
+  <section id="about">
+    <div class="container split">
+      <div class="panel">
+        <h2>About the School</h2>
+        <p>We’re a Zagreb-based theatre school where English is the language of play. Every class blends acting games, movement, and short scenes so children absorb vocabulary and grammar naturally—by using them.</p>
+        <p>Beginners are welcome. Groups are small and level-based for ages 6–16.</p>
+      </div>
+      <div class="panel">
+        <h3>What Parents Love</h3>
+        <ul>
+          <li>Visible progress in speaking & confidence within weeks</li>
+          <li>Original mini-performances each term</li>
+          <li>Native-level materials + certified instructors</li>
+          <li>Safe, supportive, high-energy classes</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Programs ===== -->
+  <section id="programs">
+    <div class="container">
+      <h2>Programs</h2>
+      <div class="cards">
+        <div class="card">
+          <span class="badge">Ages 6–8</span>
+          <h3>Play & Speak</h3>
+          <p>Storytelling, puppets, songs, and mini-scenes introduce everyday English.</p>
+          <p><b>2×60 min / week</b></p>
+        </div>
+        <div class="card">
+          <span class="badge">Ages 9–12</span>
+          <h3>Scene Makers</h3>
+          <p>Improvisation, script reading, and short comedies build vocabulary & pronunciation.</p>
+          <p><b>2×75 min / week</b></p>
+        </div>
+        <div class="card">
+          <span class="badge">Ages 13–16</span>
+          <h3>Act & Present</h3>
+          <p>Character work, accents, and public speaking for confident English on and off stage.</p>
+          <p><b>2×90 min / week</b></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Method ===== -->
+  <section id="method">
+    <div class="container split">
+      <div class="panel">
+        <h2>Our Method</h2>
+        <ol>
+          <li><b>Warm-up in English</b> — voice, rhythm, and fun articulation drills.</li>
+          <li><b>Games & improv</b> — vocabulary becomes action and reaction.</li>
+          <li><b>Short scripts</b> — memorising lines builds accuracy and confidence.</li>
+          <li><b>Showcase</b> — families see progress in friendly term-end performances.</li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h3>What They Learn</h3>
+        <ul>
+          <li>Pronunciation, stress, and intonation</li>
+          <li>Useful vocabulary & functional phrases</li>
+          <li>Teamwork, stage presence, and public speaking</li>
+          <li>Creative problem-solving—entirely in English</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Gallery ===== -->
+  <section id="gallery">
+    <div class="container">
+      <h2>Gallery</h2>
+      <div class="grid" aria-label="Photo gallery">
+        <!-- Add your ~40 images into /images and duplicate these lines -->
+        <div class="thumb"><img src="images/photo1.webp" alt="Kids rehearsing" loading="lazy"></div>
+        <div class="thumb"><img src="images/photo2.webp" alt="Warm-up circle" loading="lazy"></div>
+        <div class="thumb"><img src="images/photo3.webp" alt="Mini stage performance" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Videos ===== -->
+  <section id="videos">
+    <div class="container">
+      <h2>Videos</h2>
+      <div class="video-grid">
+        <!-- Replace VIDEO_ID_* with your YouTube IDs (or Vimeo embeds) -->
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Class highlights" loading="lazy" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Parents' showcase" loading="lazy" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" title="Improvisation games" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Testimonials ===== -->
+  <section id="testimonials">
+    <div class="container">
+      <h2>What Families Say</h2>
+      <div class="quotes">
+        <div class="quote">“Our daughter started speaking up in English class at school. The theatre games made her brave.”<br><small>— Parent of Age 10</small></div>
+        <div class="quote">“He loves rehearsals and practises lines at home. Big improvement in pronunciation!”<br><small>— Parent of Age 8</small></div>
+        <div class="quote">“The end-of-term show was fantastic—fun and clear English for all levels.”<br><small>— Parent of Age 13</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact / Enroll ===== -->
+  <section id="contact">
+    <div class="container contact">
+      <div class="panel">
+        <h2>Enroll / Contact</h2>
+        <p>Want a free trial class? Send us a message and we’ll find the right group.</p>
+        <p><b>Email:</b> <a href="mailto:info@example.hr">info@example.hr</a><br>
+           <b>Phone:</b> <a href="tel:+3850000000">+385 00 000 000</a><br>
+           <b>Address:</b> Zagreb, Croatia</p>
+        <p><a class="cta" href="mailto:info@example.hr?subject=Trial%20class%20request">Book a trial →</a></p>
+      </div>
+      <div class="panel">
+        <!-- Optional: replace map location -->
+        <iframe
+          src="https://www.google.com/maps?q=Zagreb&output=embed"
+          title="Map"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Actors Studio Zagreb — English Through Theatre
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const btn = document.getElementById('menuBtn');
+    const links = document.getElementById('navLinks');
+    btn.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }));
+  </script>
+</body>
+</html>
